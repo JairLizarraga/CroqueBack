@@ -1,0 +1,64 @@
+package com.croque.backend.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.croque.backend.model.Course;
+
+
+@Service
+public class CoursesHardcodedService {
+
+  private static List<Course> courses = new ArrayList<Course>();
+  private static int idCounter = 0;
+
+  public CoursesHardcodedService() {
+  }
+  
+  static {
+    courses.add(new Course(++idCounter, "in28minutes", "Learn Full stack with Spring Boot and Angular"));
+    courses.add(new Course(++idCounter, "in28minutes", "Learn Full stack with Spring Boot and React"));
+    courses.add(new Course(++idCounter, "in28minutes", "Master Microservices with Spring Boot and Spring Cloud"));
+    courses.add(new Course(++idCounter, "in28minutes", "Deploy Spring Boot Microservices to Cloud with Docker and Kubernetes"));
+  }
+
+  public List<Course> findAll() {
+    return courses;
+  }
+  
+  public Course deleteById(int id) {
+	    Course course = courses.get(id);
+
+	    if (course == null)
+	      return null;
+
+	    if (courses.remove(course)) {
+	      return course;
+	    }
+
+	    return null;
+  }
+  
+  public Course findById(long id) {
+	  for (Course course: courses) {
+	    if (course.getId() == id) {
+	      return course;
+	    }
+	  }
+	  return null;
+	}
+
+  public Course save(Course course) {
+	  if (course.getId() == -1 || course.getId() == 0) {
+	    course.setId(++idCounter);
+	    courses.add(course);
+	  } else {
+	    deleteById(course.getId());
+	    courses.add(course);
+	  }
+	  return course;
+	}
+
+}
